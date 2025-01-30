@@ -1,0 +1,89 @@
+/* Progress bar styles */
+.etd-progress {
+  width: 100%;
+  padding: 1.25rem;
+  background: transparent;
+}
+
+.etd-progress-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 18px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.etd-progress-bar {
+  width: 100%;
+  height: 42px; /* Increased height */
+  position: relative;
+  border-radius: 21px; /* Adjusted for new height */
+  overflow: hidden;
+  background: #f8fafc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.etd-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: width 0.3s ease;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+.etd-progress-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700; /* Increased weight */
+  font-size: 1.25rem; /* Increased size */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
+  color: #1e293b;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* Dark mode progress bar */
+.etd-dark .etd-progress-wrapper {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.etd-dark .etd-progress-bar {
+  background: #1e293b;
+}
+
+.etd-dark .etd-progress-text {
+  color: #f8fafc;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
