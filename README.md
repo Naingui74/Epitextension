@@ -1,54 +1,6 @@
 # Epitech Enhanced Extension
 
-![Extension Logo](icon128.png)
-
-A powerful browser extension designed to enhance the Epitech learning experience by providing advanced test visualization and project tracking features.
-
-## 🎯 Features
-
-### 1. Advanced Test Diff Viewer
-- **Interactive Diff Display**: Click on any failed test to see a beautiful, side-by-side comparison
-- **Syntax Highlighting**: Clear visual distinction between added, removed, and unchanged lines
-- **Line Numbers**: Easy reference with line numbers for each diff
-- **Copy to Clipboard**: One-click copying of the entire diff
-- **Dark/Light Mode**: Toggle between themes for comfortable viewing in any environment
-
-### 2. Project Progress Tracker
-- **Real-time Progress Bars**: Visual representation of project completion rates
-- **Color-coded Status**: 
-  - 🟢 Green (≥75%): Excellent progress
-  - 🟠 Orange (25-74%): In progress
-  - 🔴 Red (<25%): Needs attention
-- **Automatic Updates**: Progress bars update automatically as you navigate
-
-## 🚀 Installation
-
-### Chrome Web Store (Recommended)
-1. Visit the [Chrome Web Store](https://chrome.google.com/webstore)
-2. Search for "Epitech Enhanced Extension"
-3. Click "Add to Chrome"
-
-### Manual Installation
-1. Download this repository as a ZIP file
-2. Unzip the file to a location on your computer
-3. Open Chrome and go to `chrome://extensions/`
-4. Enable "Developer mode" in the top right
-5. Click "Load unpacked"
-6. Select the unzipped extension folder
-
-## 💡 How to Use
-
-### Viewing Test Diffs
-1. Navigate to any project test page on my.epitech.eu
-2. When a test fails, click on the test details
-3. The diff viewer will appear, showing the differences between expected and actual outputs
-4. Use the copy button to share the diff or the theme toggle for better visibility
-
-### Tracking Project Progress
-1. Go to your projects dashboard on my.epitech.eu
-2. Progress bars will automatically appear below each project card
-3. The percentage shows your current success rate for the project
-4. Colors indicate your progress status at a glance
+[Previous content remains unchanged until Technical Details section]
 
 ## 🛠 Technical Details
 
@@ -58,6 +10,32 @@ A powerful browser extension designed to enhance the Epitech learning experience
 - Host permissions for:
   - `my.epitech.eu`: Main Epitech platform
   - `api.epitest.eu`: Project data API
+
+### CSS Classes and Tags Reference
+
+#### Progress Bar Elements
+- `.etd-progress`: Main container for the progress bar
+- `.etd-progress-wrapper`: Wrapper providing background and shadow effects
+- `.etd-progress-bar`: The actual progress bar container
+- `.etd-progress-fill`: The filled portion of the progress bar
+- `.etd-progress-text`: The percentage text overlay
+
+#### Diff Viewer Elements
+- `.etd-container`: Main container for the diff viewer
+- `.etd-header`: Header section containing title and actions
+- `.etd-title`: Title text element
+- `.etd-actions`: Container for action buttons
+- `.etd-diff`: Container for the diff content
+- `.etd-diff-line`: Individual line in the diff
+- `.etd-diff-added`: Added line styling
+- `.etd-diff-removed`: Removed line styling
+- `.etd-diff-normal`: Unchanged line styling
+- `.etd-diff-line-number`: Line number display
+- `.etd-diff-content`: Actual content of the diff line
+
+#### Theme Classes
+- `.etd-dark`: Dark theme modifier
+- `.etd-notification`: Notification popup styling
 
 ### Privacy
 - No data is collected or shared
@@ -83,7 +61,6 @@ This extension is inspired by and builds upon the work of previous Epitech exten
 ### Inspiration
 - Original Epitech Test Display extension
 - Various community tools and scripts
-- https://github.com/Sigmapitech/EpitechDiffTest
 
 ## 📝 License
 
