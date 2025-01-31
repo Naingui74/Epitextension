@@ -83,6 +83,7 @@ This extension is inspired by and builds upon the work of previous Epitech exten
 ### Inspiration
 - Original Epitech Test Display extension
 - Various community tools and scripts
+- https://github.com/Sigmapitech/EpitechDiffTest
 
 ## 📝 License
 
