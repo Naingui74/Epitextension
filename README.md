@@ -55,7 +55,7 @@ This extension is open to contributions! If you have ideas for improvements or b
 
 Created by Aaron Groux (aaron.groux@epitech.eu)
 Discord: smokoxren
-
+I was inspired by an algorithm from thanks. : https://github.com/Sigmanificient
 This extension is inspired by and builds upon the work of previous Epitech extensions, aiming to provide a modern, enhanced experience for students.
 
 ### Inspiration
