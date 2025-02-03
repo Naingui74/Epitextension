@@ -1,14 +1,18 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Epitech Enhanced Extension",
   "version": "2.1.0",
   "description": "Advanced test diff viewer and project percentage tracker for Epitech students",
   "author": "Aaron Aka Naingui",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "epitech-enhanced@naingui.dev",
+      "strict_min_version": "57.0"
+    }
+  },
   "permissions": [
     "tabs",
-    "storage"
-  ],
-  "host_permissions": [
+    "storage",
     "https://my.epitech.eu/*",
     "https://api.epitest.eu/*",
     "https://api.github.com/*"
@@ -16,7 +20,15 @@
   "content_scripts": [
     {
       "matches": ["https://my.epitech.eu/*"],
-      "css": ["styles.css"],
+      "css": [
+        "styles/variables.css",
+        "styles/progress.css",
+        "styles/dark-mode.css",
+        "styles/code.css",
+        "styles/components.css",
+        "styles/main.css",
+        "styles.css"
+      ],
       "js": ["content.js"],
       "run_at": "document_end"
     }
