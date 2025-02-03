@@ -1,0 +1,63 @@
+/* Theme toggle button */
+.etd-button[data-theme-toggle] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-4);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.etd-button[data-theme-toggle]:hover {
+  background: var(--hover-overlay);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.etd-button[data-theme-toggle]:active {
+  transform: translateY(0);
+}
+
+.etd-button[data-theme-toggle] svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2px;
+  transition: all var(--transition-fast);
+}
+
+.etd-button[data-theme-toggle]:hover svg {
+  transform: rotate(12deg);
+}
+
+/* Badge styles */
+.etd-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.etd-badge-success {
+  background: var(--success-bg);
+  color: var(--success-light);
+}
+
+.etd-badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning-light);
+}
+
+.etd-badge-error {
+  background: var(--error-bg);
+  color: var(--error-light);
+}
