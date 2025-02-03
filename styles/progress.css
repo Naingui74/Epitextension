@@ -1,0 +1,74 @@
+/* Progress bar styles */
+.etd-progress {
+  width: 100%;
+  padding: var(--space-6);
+  background: transparent;
+  transition: all var(--transition-normal);
+}
+
+.etd-progress-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-4);
+  background: var(--light-bg-secondary);
+  border-radius: var(--radius-2xl);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.etd-progress-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.etd-progress-bar {
+  width: 100%;
+  height: 48px;
+  position: relative;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--light-bg-tertiary);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--light-border-color);
+  transition: all var(--transition-normal);
+}
+
+.etd-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: width var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 48px 48px;
+  animation: progress-bar-stripes 2s linear infinite;
+}
+
+.etd-progress-text {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.025em;
+  color: var(--light-text-primary);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: all var(--transition-normal);
+}
