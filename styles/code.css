@@ -1,0 +1,27 @@
+/* Code block styles */
+.etd-dark-mode code {
+  background: var(--bg-tertiary);
+  color: var(--text-highlight);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: 'Fira Code', monospace;
+  border: 1px solid var(--border-color);
+}
+
+.etd-dark-mode pre code {
+  display: block;
+  padding: var(--space-4);
+  overflow-x: auto;
+  line-height: 1.6;
+  font-size: 0.875rem;
+  color: var(--text-highlight);
+}
+
+/* Syntax highlighting for code blocks */
+.etd-dark-mode .code-keyword { color: #ff79c6; }
+.etd-dark-mode .code-function { color: #50fa7b; }
+.etd-dark-mode .code-string { color: #f1fa8c; }
+.etd-dark-mode .code-number { color: #bd93f9; }
+.etd-dark-mode .code-comment { color: #6272a4; }
+.etd-dark-mode .code-operator { color: #ff79c6; }
+.etd-dark-mode .code-punctuation { color: #f8f8f2; }
