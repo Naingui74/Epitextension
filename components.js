@@ -1,9 +1,5 @@
-// Author : Naingui ;)
-// Si tu modifie et que tu veux avoir toutes les chances de ton coter pour que la pull
-// soit accepté Code Proprement #commenteLeCode in English (Et merci de l'intention que tu porte a mon projet ^^),
-// Enjoy a toi mon amis.
-
 // UI Components for the extension
+
 export function createDiffViewer(diffLines, options = {}) {
   const container = document.createElement('div');
   container.className = 'etd-container';
