@@ -16,7 +16,15 @@
   "content_scripts": [
     {
       "matches": ["https://my.epitech.eu/*"],
-      "css": ["styles.css"],
+      "css": [
+        "styles/variables.css",
+        "styles/progress.css",
+        "styles/dark-mode.css",
+        "styles/code.css",
+        "styles/components.css",
+        "styles/main.css",
+        "styles.css"
+      ],
       "js": ["content.js"],
       "run_at": "document_end"
     }
