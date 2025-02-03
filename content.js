@@ -31,65 +31,11 @@ function createProgressBar(percentage) {
   progressWrapper.appendChild(progressBar);
   container.appendChild(progressWrapper);
   
-  return container;
-}
-
-function calculateProjectPercentage(project) {
-  if (!project?.results?.skills) return 0;
+  if (isDarkMode()) {
+    container.classList.add('etd-dark');
+  }
   
-  const skills = project.results.skills;
-  let total_test = 0;
-  let passed_test = 0;
-
-  for (const task in skills) {
-    if (skills.hasOwnProperty(task)) {
-      total_test += skills[task].count || 0;
-      passed_test += skills[task].passed || 0;
-    }
-  }
-
-  return total_test === 0 ? 0 : Number((passed_test / total_test * 100).toFixed(1));
-}
-
-async function updateProjectPercentages() {
-  if (isUpdatingProjects) return;
-  isUpdatingProjects = true;
-
-  try {
-    document.querySelectorAll('.remove-on-percentage-update').forEach(safeRemoveElement);
-
-    if (Object.keys(projects).length === 0) {
-      await fetchProjects();
-    }
-
-    const projectCards = document.querySelectorAll(".mdl-card");
-    if (!projectCards.length) return;
-    
-    for (const card of projectCards) {
-      if (!card?.isConnected) continue;
-
-      const titleSpan = card.querySelector(".mdl-card__title-text span");
-      if (!titleSpan) continue;
-
-      const projectName = titleSpan.textContent.trim();
-      const project = projects[projectName];
-      if (!project) continue;
-
-      const percentage = calculateProjectPercentage(project);
-      const progressBar = createProgressBar(percentage);
-      
-      if (!progressBar || !card.isConnected) continue;
-
-      const titleSection = card.querySelector(".mdl-card__title");
-      if (!titleSection?.parentNode?.isConnected) continue;
-
-      titleSection.parentNode.insertBefore(progressBar, titleSection.nextSibling);
-    }
-  } catch (error) {
-    console.error('Error updating project percentages:', error);
-  } finally {
-    isUpdatingProjects = false;
-  }
+  return container;
 }
 
 function computeDiff(got, expected) {
@@ -120,8 +66,8 @@ function computeDiff(got, expected) {
 function createDiffViewer(diffLines) {
   const container = document.createElement('div');
   container.className = 'etd-container';
-  if (localStorage.getItem('etd-dark-mode') === 'true') {
-    container.classList.add('etd-dark');
+  if (isDarkMode()) {
+    container.classList.add('etd-dark-mode');
   }
 
   // Header with enhanced UI
@@ -154,21 +100,18 @@ function createDiffViewer(diffLines) {
     const text = diffLines.map(line => 
       `${line.type === 'normal' ? ' ' : line.type === 'added' ? '+' : '-'} ${line.content}`
     ).join('\n');
-    navigator.clipboard.writeText(text);
-    showNotification('Copied to clipboard!', 'success');
+    copyToClipboard(text);
   };
   
   const themeBtn = document.createElement('button');
   themeBtn.className = 'etd-button';
-  const isDark = localStorage.getItem('etd-dark-mode') === 'true';
-  themeBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${isDark ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>' : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'}</svg> ${isDark ? 'Light' : 'Dark'}`;
+  themeBtn.setAttribute('data-theme-toggle', 'true');
+  const isDark = isDarkMode();
+  updateThemeButtonIcon(themeBtn, isDark);
   themeBtn.onclick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    container.classList.toggle('etd-dark');
-    const newIsDark = container.classList.contains('etd-dark');
-    localStorage.setItem('etd-dark-mode', newIsDark);
-    themeBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${newIsDark ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>' : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'}</svg> ${newIsDark ? 'Light' : 'Dark'}`;
+    toggleDarkMode();
   };
   
   actions.append(copyBtn, themeBtn);
@@ -223,6 +166,46 @@ function createDiffViewer(diffLines) {
   return container;
 }
 
+function isDarkMode() {
+  return localStorage.getItem('etd-dark-mode') === 'true' || 
+         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+
+function toggleDarkMode() {
+  const isDark = !document.body.classList.contains('etd-dark-mode');
+  document.body.classList.toggle('etd-dark-mode', isDark);
+  localStorage.setItem('etd-dark-mode', isDark);
+  
+  // Update all containers
+  document.querySelectorAll('.etd-container, .etd-progress').forEach(container => {
+    container.classList.toggle('etd-dark-mode', isDark);
+  });
+  
+  // Update theme button text
+  const themeButtons = document.querySelectorAll('.etd-button[data-theme-toggle]');
+  themeButtons.forEach(button => {
+    updateThemeButtonIcon(button, isDark);
+  });
+}
+
+function updateThemeButtonIcon(button, isDark) {
+  button.innerHTML = `
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      ${isDark ? 
+        '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>' :
+        '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+      }
+    </svg>
+    <span>${isDark ? 'Light Mode' : 'Dark Mode'}</span>
+  `;
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showNotification('Copied to clipboard!', 'success');
+  });
+}
+
 function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.className = `etd-notification etd-notification-${type}`;
@@ -243,111 +226,21 @@ function showNotification(message, type = 'info') {
   }, 2000);
 }
 
-function createCoverageBar(coverage) {
-  const container = document.createElement('div');
-  container.className = 'etd-coverage-bar';
+function calculateProjectPercentage(project) {
+  if (!project?.results?.skills) return 0;
   
-  const percentage = Math.round(coverage * 100);
-  const color = percentage >= 80 ? '#22c55e' : 
-                percentage >= 60 ? '#f97316' : 
-                '#ef4444';
-  
-  container.innerHTML = `
-    <div class="etd-coverage-label">Coverage</div>
-    <div class="etd-coverage-track">
-      <div class="etd-coverage-fill" style="width: ${percentage}%; background-color: ${color}">
-        <span class="etd-coverage-text">${percentage}%</span>
-      </div>
-    </div>
-  `;
-  
-  return container;
-}
+  const skills = project.results.skills;
+  let total_test = 0;
+  let passed_test = 0;
 
-function safeRemoveElement(element) {
-  try {
-    if (element && element.parentNode) {
-      element.parentNode.removeChild(element);
+  for (const task in skills) {
+    if (skills.hasOwnProperty(task)) {
+      total_test += skills[task].count || 0;
+      passed_test += skills[task].passed || 0;
     }
-  } catch (e) {
-    console.error('Error removing element:', e);
   }
-}
 
-function processFailDetails(failDetails) {
-  if (!failDetails || failDetails.hasAttribute('data-processed')) return;
-  
-  // Add click handler to the fail details element
-  failDetails.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const failText = this.textContent;
-    if (!failText) return;
-
-    const failMatches = failText.match(/# Got:[\s\S]*?# But expected:[\s\S]*?#/);
-    if (!failMatches) return;
-
-    const failBlock = failMatches[0];
-    const gotMatch = failBlock.match(/# Got:\n([\s\S]*?)# But expected:/);
-    const expectedMatch = failBlock.match(/# But expected:\n([\s\S]*?)#/);
-    
-    if (!gotMatch || !expectedMatch) return;
-
-    const gotContent = gotMatch[1].trim();
-    const expectedContent = expectedMatch[1].trim();
-    
-    if (!gotContent && !expectedContent) return;
-
-    const diffLines = computeDiff(gotContent, expectedContent);
-    const diffViewer = createDiffViewer(diffLines);
-    
-    const testContainer = this.closest('.test-container') || 
-                         this.closest('.test-result') || 
-                         this.parentNode;
-    
-    if (testContainer) {
-      // Remove any existing diff viewers
-      const existingViewer = testContainer.querySelector('.etd-container');
-      if (existingViewer) {
-        existingViewer.remove();
-      }
-
-      // Prevent default behavior for all clickable elements in the container
-      const clickableElements = testContainer.querySelectorAll('a, button, input[type="submit"]');
-      clickableElements.forEach(element => {
-        element.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        }, true);
-      });
-
-      // Prevent form submissions
-      const forms = testContainer.querySelectorAll('form');
-      forms.forEach(form => {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        }, true);
-      });
-
-      // Prevent Enter key from submitting
-      testContainer.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        }
-      }, true);
-
-      // Insert the diff viewer
-      testContainer.insertBefore(diffViewer, this.nextSibling);
-    }
-  }, true);
-
-  failDetails.setAttribute('data-processed', 'true');
+  return total_test === 0 ? 0 : Number((passed_test / total_test * 100).toFixed(1));
 }
 
 async function fetchProjects() {
@@ -386,6 +279,127 @@ async function fetchProjects() {
   }
 }
 
+async function updateProjectPercentages() {
+  if (isUpdatingProjects) return;
+  isUpdatingProjects = true;
+
+  try {
+    document.querySelectorAll('.remove-on-percentage-update').forEach(safeRemoveElement);
+
+    if (Object.keys(projects).length === 0) {
+      await fetchProjects();
+    }
+
+    const projectCards = document.querySelectorAll(".mdl-card");
+    if (!projectCards.length) return;
+    
+    for (const card of projectCards) {
+      if (!card?.isConnected) continue;
+
+      const titleSpan = card.querySelector(".mdl-card__title-text span");
+      if (!titleSpan) continue;
+
+      const projectName = titleSpan.textContent.trim();
+      const project = projects[projectName];
+      if (!project) continue;
+
+      const percentage = calculateProjectPercentage(project);
+      const progressBar = createProgressBar(percentage);
+      
+      if (!progressBar || !card.isConnected) continue;
+
+      const titleSection = card.querySelector(".mdl-card__title");
+      if (!titleSection?.parentNode?.isConnected) continue;
+
+      titleSection.parentNode.insertBefore(progressBar, titleSection.nextSibling);
+    }
+  } catch (error) {
+    console.error('Error updating project percentages:', error);
+  } finally {
+    isUpdatingProjects = false;
+  }
+}
+
+function safeRemoveElement(element) {
+  try {
+    if (element && element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+  } catch (e) {
+    console.error('Error removing element:', e);
+  }
+}
+
+function processFailDetails(failDetails) {
+  if (!failDetails || failDetails.hasAttribute('data-processed')) return;
+  
+  failDetails.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const failText = this.textContent;
+    if (!failText) return;
+
+    const failMatches = failText.match(/# Got:[\s\S]*?# But expected:[\s\S]*?#/);
+    if (!failMatches) return;
+
+    const failBlock = failMatches[0];
+    const gotMatch = failBlock.match(/# Got:\n([\s\S]*?)# But expected:/);
+    const expectedMatch = failBlock.match(/# But expected:\n([\s\S]*?)#/);
+    
+    if (!gotMatch || !expectedMatch) return;
+
+    const gotContent = gotMatch[1].trim();
+    const expectedContent = expectedMatch[1].trim();
+    
+    if (!gotContent && !expectedContent) return;
+
+    const diffLines = computeDiff(gotContent, expectedContent);
+    const diffViewer = createDiffViewer(diffLines);
+    
+    const testContainer = this.closest('.test-container') || 
+                         this.closest('.test-result') || 
+                         this.parentNode;
+    
+    if (testContainer) {
+      const existingViewer = testContainer.querySelector('.etd-container');
+      if (existingViewer) {
+        existingViewer.remove();
+      }
+
+      const clickableElements = testContainer.querySelectorAll('a, button, input[type="submit"]');
+      clickableElements.forEach(element => {
+        element.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }, true);
+      });
+
+      const forms = testContainer.querySelectorAll('form');
+      forms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }, true);
+      });
+
+      testContainer.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      }, true);
+
+      testContainer.insertBefore(diffViewer, this.nextSibling);
+    }
+  }, true);
+
+  failDetails.setAttribute('data-processed', 'true');
+}
+
 let updateTimeoutId = null;
 const UPDATE_INTERVAL = 1000;
 
@@ -396,8 +410,42 @@ function updateProjectPercentagesWithDelay() {
   updateTimeoutId = window.setTimeout(updateProjectPercentages, UPDATE_INTERVAL);
 }
 
+function addDarkModeToggle() {
+  const header = document.querySelector('.mdl-layout__header-row');
+  if (!header) return;
+
+  const darkModeButton = document.createElement('button');
+  darkModeButton.className = 'etd-button';
+  darkModeButton.setAttribute('data-theme-toggle', 'true');
+  darkModeButton.style.marginLeft = 'auto';
+  darkModeButton.style.marginRight = '20px';
+  
+  const isDark = isDarkMode();
+  updateThemeButtonIcon(darkModeButton, isDark);
+  
+  darkModeButton.onclick = () => toggleDarkMode();
+  header.appendChild(darkModeButton);
+}
+
 function init() {
   let currentPath = window.location.href;
+  
+  // Initialize dark mode
+  const isDark = isDarkMode();
+  if (isDark) {
+    document.body.classList.add('etd-dark-mode');
+  }
+  
+  // Add dark mode toggle button
+  addDarkModeToggle();
+  
+  // Watch for system dark mode changes
+  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  darkModeMediaQuery.addListener((e) => {
+    if (localStorage.getItem('etd-dark-mode') === null) {
+      document.body.classList.toggle('etd-dark-mode', e.matches);
+    }
+  });
   
   // Process any existing fail details first
   document.querySelectorAll('.fail-details').forEach(processFailDetails);
