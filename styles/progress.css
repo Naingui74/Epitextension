@@ -1,17 +1,9 @@
-/* Progress bar styles */
-.etd-progress {
-  width: 100%;
-  padding: var(--space-6);
-  background: transparent;
-  transition: all var(--transition-normal);
-}
-
 .etd-progress-wrapper {
-  max-width: 600px;
+  max-width: 800px; /* Increased from 600px to 800px */
   margin: 0 auto;
   padding: var(--space-4);
-  background: var(--light-bg-secondary);
-  border: 1px solid var(--light-border-color);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-2xl);
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.05),
@@ -32,10 +24,25 @@
   position: relative;
   border-radius: var(--radius-full);
   overflow: hidden;
-  background: var(--light-bg-tertiary);
+  background: #ffffff;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--light-border-color);
+  border: 1px solid #e2e8f0;
   transition: all var(--transition-normal);
+}
+
+/* Dark mode overrides */
+.etd-dark-mode .etd-progress {
+  background: var(--bg-primary); /* Dark background in dark mode */
+}
+
+.etd-dark-mode .etd-progress-wrapper {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.etd-dark-mode .etd-progress-bar {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
 }
 
 .etd-progress-fill {
@@ -68,29 +75,16 @@
   font-weight: 700;
   font-size: 1.25rem;
   letter-spacing: 0.025em;
-  color: var(--light-text-primary);
+  color: #1e293b;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   transition: all var(--transition-normal);
 }
 
-/* Light mode specific styles */
-:root:not(.etd-dark-mode) .etd-progress-wrapper,
-body:not(.etd-dark-mode) .etd-progress-wrapper {
-  background: var(--light-bg-secondary);
-  border-color: var(--light-border-color);
-}
-
-:root:not(.etd-dark-mode) .etd-progress-bar,
-body:not(.etd-dark-mode) .etd-progress-bar {
-  background: var(--light-bg-tertiary);
-  border-color: var(--light-border-color);
-}
-
-:root:not(.etd-dark-mode) .etd-progress-text,
-body:not(.etd-dark-mode) .etd-progress-text {
-  color: var(--light-text-primary);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+/* Dark mode text override */
+.etd-dark-mode .etd-progress-text {
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes progress-bar-stripes {
@@ -99,5 +93,20 @@ body:not(.etd-dark-mode) .etd-progress-text {
   }
   to {
     background-position: 0 0;
+  }
+}
+
+/* High contrast mode */
+@media (forced-colors: active) {
+  .etd-progress-bar {
+    border: 2px solid CanvasText;
+  }
+  
+  .etd-progress-fill {
+    background: Highlight;
+  }
+  
+  .etd-progress-text {
+    color: CanvasText;
   }
 }
