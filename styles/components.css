@@ -4,17 +4,27 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-4);
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
+  min-width: 160px;
+  height: 44px;
 }
 
 .etd-theme-toggle::before {
@@ -23,8 +33,8 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.05)
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
   );
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -32,7 +42,10 @@
 
 .etd-theme-toggle:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 
+    0 8px 12px -3px rgba(0, 0, 0, 0.15),
+    0 4px 6px -2px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .etd-theme-toggle:hover::before {
@@ -41,31 +54,36 @@
 
 .etd-theme-toggle:active {
   transform: translateY(0);
+  box-shadow: 
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.06);
 }
 
 .etd-theme-toggle svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   stroke-width: 2px;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  left: 1rem;
 }
 
 .etd-theme-toggle:hover svg {
-  transform: rotate(360deg);
+  transform: rotate(360deg) scale(1.1);
 }
 
 .etd-theme-toggle .icon-sun {
-  position: absolute;
-  left: var(--space-4);
   opacity: 0;
   transform: rotate(-90deg) scale(0.5);
+  color: #fbbf24;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.3));
 }
 
 .etd-theme-toggle .icon-moon {
-  position: absolute;
-  left: var(--space-4);
   opacity: 1;
   transform: rotate(0) scale(1);
+  color: #60a5fa;
+  filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.3));
 }
 
 .etd-theme-toggle.light-mode .icon-sun {
@@ -79,32 +97,53 @@
 }
 
 .etd-theme-toggle span {
-  margin-left: 28px;
+  margin-left: 32px;
   transition: all 0.3s ease;
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
 }
 
-/* Badge styles */
-.etd-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1;
+/* Dark mode specific styles */
+.etd-dark-mode .etd-theme-toggle {
+  background: linear-gradient(
+    135deg,
+    rgba(17, 24, 39, 0.95),
+    rgba(17, 24, 39, 0.8)
+  );
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.2),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.etd-badge-success {
-  background: var(--success-bg);
-  color: var(--success-light);
+.etd-dark-mode .etd-theme-toggle:hover {
+  box-shadow: 
+    0 8px 12px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -2px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.etd-badge-warning {
-  background: var(--warning-bg);
-  color: var(--warning-light);
+/* High contrast mode */
+@media (forced-colors: active) {
+  .etd-theme-toggle {
+    border: 2px solid CanvasText;
+  }
+  
+  .etd-theme-toggle svg {
+    forced-color-adjust: none;
+  }
 }
 
-.etd-badge-error {
-  background: var(--error-bg);
-  color: var(--error-light);
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .etd-theme-toggle,
+  .etd-theme-toggle svg,
+  .etd-theme-toggle span {
+    transition: none !important;
+    animation: none !important;
+  }
 }
