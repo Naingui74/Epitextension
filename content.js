@@ -13,7 +13,6 @@ function isDarkMode() {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-
 function toggleDarkMode() {
   const isDark = !document.body.classList.contains('etd-dark-mode');
   document.body.classList.toggle('etd-dark-mode', isDark);
@@ -45,6 +44,34 @@ function updateThemeButtonIcon(button, isDark) {
     </svg>
     <span>${isDark ? 'Light Mode' : 'Dark Mode'}</span>
   `;
+}
+
+function addDarkModeToggle() {
+  const header = document.querySelector('.mdl-layout__header-row');
+  if (!header) {
+    // If header not found, retry after a short delay
+    setTimeout(addDarkModeToggle, 100);
+    return;
+  }
+
+  // Remove any existing theme toggle buttons
+  header.querySelectorAll('.etd-theme-toggle').forEach(btn => btn.remove());
+
+  const darkModeButton = document.createElement('button');
+  const isDark = isDarkMode();
+  darkModeButton.className = `etd-theme-toggle ${isDark ? 'dark-mode' : 'light-mode'}`;
+  darkModeButton.style.marginLeft = 'auto';
+  darkModeButton.style.marginRight = '20px';
+  
+  updateThemeButtonIcon(darkModeButton, isDark);
+  darkModeButton.onclick = () => toggleDarkMode();
+  header.appendChild(darkModeButton);
+
+  if (isDark) {
+    document.body.classList.add('etd-dark-mode');
+  } else {
+    document.body.classList.remove('etd-dark-mode');
+  }
 }
 
 function showNotification(message, type = 'info') {
@@ -466,17 +493,7 @@ function init() {
   }
   
   // Add dark mode toggle
-  const header = document.querySelector('.mdl-layout__header-row');
-  if (header) {
-    const darkModeButton = document.createElement('button');
-    darkModeButton.className = `etd-theme-toggle ${isDark ? 'dark-mode' : 'light-mode'}`;
-    darkModeButton.style.marginLeft = 'auto';
-    darkModeButton.style.marginRight = '20px';
-    
-    updateThemeButtonIcon(darkModeButton, isDark);
-    darkModeButton.onclick = toggleDarkMode;
-    header.appendChild(darkModeButton);
-  }
+  addDarkModeToggle();
   
   // Watch for system dark mode changes
   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
