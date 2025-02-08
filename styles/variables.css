@@ -1,23 +1,54 @@
-/* Base theme variables */
+/* Enhanced CSS Variables with Modern Design System */
 :root {
-  /* Light theme */
-  --light-bg-primary: #ffffff;
-  --light-bg-secondary: #f8fafc;
-  --light-bg-tertiary: #f1f5f9;
-  --light-text-primary: #0f172a;
-  --light-text-secondary: #334155;
-  --light-border-color: #e2e8f0;
-  --light-accent: #3b82f6;
+  /* Color System - HSL for better color manipulation */
+  --primary-hue: 221;
+  --primary-sat: 83%;
   
-  /* Spacing */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
+  /* Light Theme Colors */
+  --light-bg-primary: hsl(0, 0%, 100%);
+  --light-bg-secondary: hsl(210, 40%, 98%);
+  --light-bg-tertiary: hsl(214, 32%, 91%);
+  --light-text-primary: hsl(222, 47%, 11%);
+  --light-text-secondary: hsl(215, 25%, 27%);
+  --light-text-tertiary: hsl(217, 19%, 35%);
+  --light-border-color: hsl(216, 34%, 89%);
   
-  /* Border radius */
+  /* Dark Theme Colors */
+  --dark-bg-primary: hsl(222, 47%, 11%);
+  --dark-bg-secondary: hsl(217, 33%, 17%);
+  --dark-bg-tertiary: hsl(215, 25%, 27%);
+  --dark-text-primary: hsl(210, 40%, 98%);
+  --dark-text-secondary: hsl(214, 32%, 91%);
+  --dark-text-tertiary: hsl(217, 19%, 35%);
+  --dark-border-color: hsl(215, 19%, 35%);
+  
+  /* Semantic Colors */
+  --success-hue: 142;
+  --warning-hue: 45;
+  --error-hue: 0;
+  --info-hue: 221;
+  
+  /* Status Colors with HSL */
+  --success: hsl(var(--success-hue), 76%, 36%);
+  --success-light: hsl(var(--success-hue), 84%, 74%);
+  --warning: hsl(var(--warning-hue), 93%, 47%);
+  --warning-light: hsl(var(--warning-hue), 96%, 69%);
+  --error: hsl(var(--error-hue), 84%, 60%);
+  --error-light: hsl(var(--error-hue), 94%, 82%);
+  --info: hsl(var(--info-hue), 83%, 53%);
+  --info-light: hsl(var(--info-hue), 94%, 82%);
+  
+  /* Spacing System - Based on 4px grid */
+  --space-1: clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-2: clamp(0.5rem, 1vw, 1rem);
+  --space-3: clamp(0.75rem, 1.5vw, 1.5rem);
+  --space-4: clamp(1rem, 2vw, 2rem);
+  --space-6: clamp(1.5rem, 3vw, 3rem);
+  --space-8: clamp(2rem, 4vw, 4rem);
+  --space-12: clamp(3rem, 6vw, 6rem);
+  --space-16: clamp(4rem, 8vw, 8rem);
+  
+  /* Border Radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
@@ -25,7 +56,53 @@
   --radius-2xl: 1rem;
   --radius-full: 9999px;
   
-  /* Z-index layers */
+  /* Shadows with Enhanced Depth */
+  --shadow-sm: 
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 1px 1px rgba(0, 0, 0, 0.03);
+  --shadow-md: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Glass Effect */
+  --glass-bg: hsla(0, 0%, 100%, 0.8);
+  --glass-border: hsla(0, 0%, 100%, 0.1);
+  --glass-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.1);
+  
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+  --font-display: var(--font-sans);
+  
+  /* Font Sizes - Fluid Typography */
+  --text-xs: clamp(0.75rem, 0.75vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.875vw, 1rem);
+  --text-base: clamp(1rem, 1vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.125vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.25vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.5vw, 1.75rem);
+  
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Z-index Scale */
   --z-negative: -1;
   --z-elevate: 1;
   --z-sticky: 100;
@@ -35,18 +112,47 @@
   --z-popover: 500;
   --z-toast: 600;
   
-  /* Animations */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 350ms ease;
+  /* Focus Rings */
+  --focus-ring-color: hsla(var(--primary-hue), var(--primary-sat), 50%, 0.35);
+  --focus-ring-offset: 2px;
+  --focus-ring-width: 3px;
   
-  /* Light mode shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+  /* Motion Safe Reduced */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+  --glass-bg: hsla(222, 47%, 11%, 0.8);
+  --glass-border: hsla(0, 0%, 100%, 0.1);
+  --glass-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.3);
   
-  /* Light mode glass effect */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  /* Enhanced Dark Mode Shadows */
+  --shadow-sm: 
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 1px 1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.4),
+    0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.5),
+    0 4px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.6),
+    0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  :root {
+    --primary-color: SelectedItem;
+    --focus-ring-color: Highlight;
+  }
 }
