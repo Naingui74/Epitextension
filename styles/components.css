@@ -1,39 +1,86 @@
 /* Theme toggle button */
-.etd-button[data-theme-toggle] {
+.etd-theme-toggle {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
   background: var(--glass-bg);
   backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
   color: var(--text-primary);
   font-weight: 500;
   font-size: 0.875rem;
-  transition: all var(--transition-fast);
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
 
-.etd-button[data-theme-toggle]:hover {
-  background: var(--hover-overlay);
-  transform: translateY(-1px);
+.etd-theme-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.etd-theme-toggle:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.etd-button[data-theme-toggle]:active {
+.etd-theme-toggle:hover::before {
+  opacity: 1;
+}
+
+.etd-theme-toggle:active {
   transform: translateY(0);
 }
 
-.etd-button[data-theme-toggle] svg {
-  width: 16px;
-  height: 16px;
+.etd-theme-toggle svg {
+  width: 18px;
+  height: 18px;
   stroke-width: 2px;
-  transition: all var(--transition-fast);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.etd-button[data-theme-toggle]:hover svg {
-  transform: rotate(12deg);
+.etd-theme-toggle:hover svg {
+  transform: rotate(360deg);
+}
+
+.etd-theme-toggle .icon-sun {
+  position: absolute;
+  left: var(--space-4);
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.etd-theme-toggle .icon-moon {
+  position: absolute;
+  left: var(--space-4);
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+.etd-theme-toggle.light-mode .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+.etd-theme-toggle.light-mode .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+.etd-theme-toggle span {
+  margin-left: 28px;
+  transition: all 0.3s ease;
 }
 
 /* Badge styles */
