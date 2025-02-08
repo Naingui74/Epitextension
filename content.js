@@ -1,4 +1,3 @@
-// Utility functions
 let isUpdatingProjects = false;
 let projects = {};
 
@@ -23,7 +22,7 @@ function createProgressBar(percentage) {
   
   const progressText = document.createElement('div');
   progressText.className = 'etd-progress-text';
-  progressText.style.color = percentage > 75 ? '#fff' : '#1e293b';
+  progressText.style.color = isDarkMode() ? '#f9fafb' : (percentage > 75 ? '#fff' : '#1e293b');
   progressText.textContent = `${percentage}%`;
   
   progressBar.appendChild(progressFill);
@@ -32,11 +31,12 @@ function createProgressBar(percentage) {
   container.appendChild(progressWrapper);
   
   if (isDarkMode()) {
-    container.classList.add('etd-dark');
+    container.classList.add('etd-dark-mode');
   }
   
   return container;
 }
+// Utility functions
 
 function computeDiff(got, expected) {
   const gotLines = got.split('\n');
@@ -176,30 +176,32 @@ function toggleDarkMode() {
   document.body.classList.toggle('etd-dark-mode', isDark);
   localStorage.setItem('etd-dark-mode', isDark);
   
-  // Update all containers
-  document.querySelectorAll('.etd-container, .etd-progress').forEach(container => {
-    container.classList.toggle('etd-dark-mode', isDark);
-  });
-  
-  // Update theme button text
-  const themeButtons = document.querySelectorAll('.etd-button[data-theme-toggle]');
-  themeButtons.forEach(button => {
+  // Update all theme toggle buttons
+  document.querySelectorAll('.etd-theme-toggle').forEach(button => {
     updateThemeButtonIcon(button, isDark);
   });
 }
 
 function updateThemeButtonIcon(button, isDark) {
+  button.className = `etd-theme-toggle ${isDark ? 'dark-mode' : 'light-mode'}`;
   button.innerHTML = `
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      ${isDark ? 
-        '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>' :
-        '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
-      }
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
     </svg>
     <span>${isDark ? 'Light Mode' : 'Dark Mode'}</span>
   `;
 }
-
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => {
     showNotification('Copied to clipboard!', 'success');
@@ -415,16 +417,20 @@ function addDarkModeToggle() {
   if (!header) return;
 
   const darkModeButton = document.createElement('button');
-  darkModeButton.className = 'etd-button';
-  darkModeButton.setAttribute('data-theme-toggle', 'true');
+  const isDark = isDarkMode();
+  darkModeButton.className = `etd-theme-toggle ${isDark ? 'dark-mode' : 'light-mode'}`;
   darkModeButton.style.marginLeft = 'auto';
   darkModeButton.style.marginRight = '20px';
   
-  const isDark = isDarkMode();
   updateThemeButtonIcon(darkModeButton, isDark);
   
   darkModeButton.onclick = () => toggleDarkMode();
   header.appendChild(darkModeButton);
+
+  // Initialize dark mode if needed
+  if (isDark) {
+    document.body.classList.add('etd-dark-mode');
+  }
 }
 
 function init() {
