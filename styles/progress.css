@@ -1,5 +1,15 @@
+/* Progress bar styles */
+.etd-progress {
+  width: 100%;
+  padding: var(--space-6);
+  background: #ffffff;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
 .etd-progress-wrapper {
-  max-width: 800px; /* Increased from 600px to 800px */
+  max-width: 600px;
   margin: 0 auto;
   padding: var(--space-4);
   background: #ffffff;
@@ -8,15 +18,64 @@
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.05),
     0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: all var(--transition-bounce);
+  position: relative;
 }
 
-.etd-progress-wrapper:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.05),
-    0 2px 4px rgba(0, 0, 0, 0.1);
+/* Trophy Animation for 100% */
+.etd-progress-wrapper[data-complete="true"] {
+  animation: complete-bounce 1s var(--transition-bounce);
 }
+
+.etd-progress-wrapper[data-complete="true"]::before {
+  content: '🏆';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  animation: trophy-drop 1s var(--transition-bounce) forwards;
+}
+
+/* Confetti Animation */
+.etd-progress-wrapper[data-complete="true"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: confetti-fade 3s linear forwards;
+  background-image: 
+    radial-gradient(circle at 25% -25%, #FFD700 2px, transparent 3px),
+    radial-gradient(circle at 75% -25%, #FF69B4 2px, transparent 3px),
+    radial-gradient(circle at 50% -50%, #00FF00 2px, transparent 3px),
+    radial-gradient(circle at 25% -75%, #FF4500 2px, transparent 3px),
+    radial-gradient(circle at 75% -75%, #4169E1 2px, transparent 3px);
+  background-size: 
+    50px 50px,
+    60px 60px,
+    70px 70px,
+    80px 80px,
+    90px 90px;
+  pointer-events: none;
+}
+
+/* Sparkles */
+.etd-progress-wrapper[data-complete="true"] .sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: gold;
+  animation: sparkle 1s linear infinite;
+}
+
+.etd-progress-wrapper[data-complete="true"] .sparkle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+.etd-progress-wrapper[data-complete="true"] .sparkle:nth-child(2) { left: 30%; top: 40%; animation-delay: 0.2s; }
+.etd-progress-wrapper[data-complete="true"] .sparkle:nth-child(3) { left: 50%; top: 60%; animation-delay: 0.4s; }
+.etd-progress-wrapper[data-complete="true"] .sparkle:nth-child(4) { left: 70%; top: 40%; animation-delay: 0.6s; }
+.etd-progress-wrapper[data-complete="true"] .sparkle:nth-child(5) { left: 90%; top: 20%; animation-delay: 0.8s; }
 
 .etd-progress-bar {
   width: 100%;
@@ -28,21 +87,6 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid #e2e8f0;
   transition: all var(--transition-normal);
-}
-
-/* Dark mode overrides */
-.etd-dark-mode .etd-progress {
-  background: var(--bg-primary); /* Dark background in dark mode */
-}
-
-.etd-dark-mode .etd-progress-wrapper {
-  background: var(--bg-secondary);
-  border-color: var(--border-color);
-}
-
-.etd-dark-mode .etd-progress-bar {
-  background: var(--bg-tertiary);
-  border-color: var(--border-color);
 }
 
 .etd-progress-fill {
@@ -65,6 +109,23 @@
   animation: progress-bar-stripes 2s linear infinite;
 }
 
+/* 100% completion animation */
+.etd-progress-fill[data-complete="true"] {
+  animation: 
+    progress-bar-stripes 2s linear infinite,
+    progress-pulse 2s ease-in-out infinite;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
 .etd-progress-text {
   position: absolute;
   inset: 0;
@@ -77,22 +138,117 @@
   letter-spacing: 0.025em;
   color: #1e293b;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
   transition: all var(--transition-normal);
 }
 
-/* Dark mode text override */
+/* 100% text animation */
+.etd-progress-text[data-complete="true"] {
+  animation: text-bounce 0.5s var(--transition-bounce) infinite;
+  color: #22c55e;
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+/* Dark mode overrides */
+.etd-dark-mode .etd-progress {
+  background: var(--bg-primary);
+}
+
+.etd-dark-mode .etd-progress-wrapper {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.etd-dark-mode .etd-progress-bar {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
 .etd-dark-mode .etd-progress-text {
   color: var(--text-primary);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+/* Animations */
 @keyframes progress-bar-stripes {
-  from {
-    background-position: 48px 0;
+  from { background-position: 48px 0; }
+  to { background-position: 0 0; }
+}
+
+@keyframes progress-pulse {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+  100% { filter: brightness(1); }
+}
+
+@keyframes text-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes complete-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes trophy-drop {
+  0% { 
+    top: -50px;
+    transform: translateX(-50%) rotate(-20deg);
+    opacity: 0;
   }
-  to {
-    background-position: 0 0;
+  50% {
+    top: -20px;
+    transform: translateX(-50%) rotate(15deg);
+    opacity: 1;
+  }
+  75% {
+    top: -35px;
+    transform: translateX(-50%) rotate(-10deg);
+  }
+  100% {
+    top: -30px;
+    transform: translateX(-50%) rotate(0);
+  }
+}
+
+@keyframes confetti-fade {
+  0% {
+    opacity: 0;
+    background-position: 
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background-position: 
+      25px 25px,
+      -25px 25px,
+      0 25px,
+      25px -25px,
+      -25px -25px;
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
   }
 }
 
@@ -108,5 +264,16 @@
   
   .etd-progress-text {
     color: CanvasText;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .etd-progress *,
+  .etd-progress *::before,
+  .etd-progress *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
