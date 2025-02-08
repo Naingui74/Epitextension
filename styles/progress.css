@@ -11,6 +11,7 @@
   margin: 0 auto;
   padding: var(--space-4);
   background: var(--light-bg-secondary);
+  border: 1px solid var(--light-border-color);
   border-radius: var(--radius-2xl);
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.05),
@@ -68,7 +69,35 @@
   font-size: 1.25rem;
   letter-spacing: 0.025em;
   color: var(--light-text-primary);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   transition: all var(--transition-normal);
+}
+
+/* Light mode specific styles */
+:root:not(.etd-dark-mode) .etd-progress-wrapper,
+body:not(.etd-dark-mode) .etd-progress-wrapper {
+  background: var(--light-bg-secondary);
+  border-color: var(--light-border-color);
+}
+
+:root:not(.etd-dark-mode) .etd-progress-bar,
+body:not(.etd-dark-mode) .etd-progress-bar {
+  background: var(--light-bg-tertiary);
+  border-color: var(--light-border-color);
+}
+
+:root:not(.etd-dark-mode) .etd-progress-text,
+body:not(.etd-dark-mode) .etd-progress-text {
+  color: var(--light-text-primary);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 48px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
 }
