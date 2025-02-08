@@ -1,4 +1,5 @@
-/* Dark mode variables */
+/* Dark mode styles */
+body.etd-dark-mode,
 .etd-dark-mode {
   /* Dark theme with improved contrast */
   --bg-primary: #030712;
@@ -52,4 +53,181 @@
   --success-bg: rgba(34, 197, 94, 0.1);
   --warning-bg: rgba(249, 115, 22, 0.1);
   --error-bg: rgba(239, 68, 68, 0.1);
+}
+
+/* Dark mode specific overrides */
+.etd-dark-mode {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Container overrides */
+.etd-dark-mode .etd-container,
+.etd-dark-mode .mdl-card {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* Card overrides */
+.etd-dark-mode .mdl-card,
+.etd-dark-mode .mdl-card__title,
+.etd-dark-mode .mdl-card__supporting-text {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.etd-dark-mode .mdl-card__title-text,
+.etd-dark-mode .mdl-card__title-text span {
+  color: var(--text-primary) !important;
+}
+
+/* Text overrides */
+.etd-dark-mode h1,
+.etd-dark-mode h2,
+.etd-dark-mode h3,
+.etd-dark-mode h4,
+.etd-dark-mode h5,
+.etd-dark-mode h6,
+.etd-dark-mode p,
+.etd-dark-mode span,
+.etd-dark-mode div,
+.etd-dark-mode .mdl-card div {
+  color: var(--text-primary) !important;
+}
+
+/* Force white text for specific elements */
+.etd-dark-mode div,
+.etd-dark-mode div *,
+.etd-dark-mode .mdl-card div,
+.etd-dark-mode .mdl-card div * {
+  color: var(--text-primary) !important;
+}
+
+/* Button overrides */
+.etd-dark-mode .etd-button,
+.etd-dark-mode .mdl-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border-color: var(--border-color);
+}
+
+.etd-dark-mode .etd-button:hover,
+.etd-dark-mode .mdl-button:hover {
+  background-color: var(--button-hover);
+}
+
+/* Link overrides */
+.etd-dark-mode a {
+  color: var(--link-color);
+}
+
+.etd-dark-mode a:hover {
+  color: var(--link-hover);
+}
+
+/* Diff viewer overrides */
+.etd-dark-mode .etd-diff-line {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.etd-dark-mode .etd-diff-added {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.etd-dark-mode .etd-diff-removed {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Progress bar overrides */
+.etd-dark-mode .etd-progress-wrapper {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.etd-dark-mode .etd-progress-bar {
+  background-color: var(--bg-tertiary);
+}
+
+.etd-dark-mode .etd-progress-text {
+  color: var(--text-primary) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Layout overrides */
+.etd-dark-mode .mdl-layout__header {
+  background-color: var(--bg-secondary);
+}
+
+.etd-dark-mode .mdl-layout__drawer {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.etd-dark-mode .mdl-layout__drawer .mdl-navigation__link {
+  color: var(--text-primary);
+}
+
+.etd-dark-mode .mdl-layout__drawer .mdl-navigation__link:hover {
+  background-color: var(--hover-overlay);
+}
+
+/* Table overrides */
+.etd-dark-mode table,
+.etd-dark-mode th,
+.etd-dark-mode td {
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.etd-dark-mode th {
+  background-color: var(--bg-tertiary);
+}
+
+.etd-dark-mode tr:nth-child(even) {
+  background-color: var(--bg-tertiary);
+}
+
+/* Input overrides */
+.etd-dark-mode input,
+.etd-dark-mode select,
+.etd-dark-mode textarea {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.etd-dark-mode input:focus,
+.etd-dark-mode select:focus,
+.etd-dark-mode textarea:focus {
+  border-color: var(--button-bg);
+  box-shadow: var(--focus-ring);
+}
+
+/* Scrollbar customization */
+.etd-dark-mode ::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.etd-dark-mode ::-webkit-scrollbar-track {
+  background-color: var(--bg-secondary);
+}
+
+.etd-dark-mode ::-webkit-scrollbar-thumb {
+  background-color: var(--bg-tertiary);
+  border: 3px solid var(--bg-secondary);
+  border-radius: 7px;
+}
+
+.etd-dark-mode ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--border-hover);
+}
+
+/* Selection style */
+.etd-dark-mode ::selection {
+  background-color: var(--button-bg);
+  color: var(--button-text);
 }
