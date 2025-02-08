@@ -2,34 +2,34 @@
 
 > Transform your Epitech experience with intelligent test analysis and project tracking
 
-![Extension Preview](https://raw.githubusercontent.com/naingui/epitech-enhanced/main/assets/preview.gif)
+## ✨ Features Showcase
 
-## ✨ Features
+### 🎯 Project Progress Tracking
+<div align="center">
+  <img src="img/progress-dark.png" alt="Progress Tracking Dark Mode" width="100%" />
+  <p><em>Real-time progress tracking with celebration animations and detailed metrics</em></p>
+  <img src="img/progress-light.png" alt="Progress Tracking Light Mode" width="100%" />
+  <p><em>Clean, modern interface in both dark and light modes</em></p>
+</div>
 
-### 🔍 Smart Test Analysis
-- **Intelligent Diff Viewer**
-  - Instantly understand test failures with smart analysis
-  - Get clear, actionable guidance on how to fix issues
-  - See exact character-level differences
-  - Copy expected output with one click
+### 🌓 Smart Theme Switching
+<div align="center">
+  <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
+    <img src="img/theme-dark.png" alt="Dark Mode" width="48%" />
+    <img src="img/theme-light.png" alt="Light Mode" width="48%" />
+  </div>
+  <p><em>Seamlessly switch between light and dark themes with system preference detection</em></p>
+</div>
 
-### 📊 Project Progress Tracking
-- **Real-time Progress Bars**
-  - Visual progress tracking for all projects
-  - Color-coded status indicators
-  - Percentage completion metrics
-  - Automatic updates
-
-### 🌓 Dark Mode
-- **Smart Theme Switching**
-  - Automatic system theme detection
-  - Manual theme toggle
-  - Smooth transitions
-  - High contrast support
+### 🔍 Intelligent Test Analysis
+<div align="center">
+  <img src="img/test-diff.png" alt="Test Analysis" width="100%" />
+  <p><em>Advanced diff viewer with smart analysis and quick fixes</em></p>
+</div>
 
 ## 🎯 Quick Start
 
-1. Install the extension from your browser's store ( NOT ACCESIBLE NOW, INSTALL .ZIP):
+1. Install the extension from your browser's store:
    - [Chrome Web Store](https://chrome.google.com/webstore/detail/epitech-enhanced/...)
    - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/epitech-enhanced/)
 
@@ -73,7 +73,7 @@
   - Percentage completion
   - Color-coded status
   - Automatic updates
-  - Smooth animations
+  - Celebration animations
 
 #### Project Stats
 - **Detailed Metrics**
