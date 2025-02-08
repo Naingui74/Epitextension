@@ -170,7 +170,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Getting Help
 
 - Open an issue on GitHub
-- Contact via [Discord](https://discord.gg/...)
+- Contact via [Discord](smokoxren)
 - Email support: support@epitech-enhanced.dev
 
 ## 🚀 Future Plans
