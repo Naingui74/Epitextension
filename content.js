@@ -342,7 +342,7 @@ function downloadTestOutput(content) {
   URL.revokeObjectURL(url);
 }
 
-// Project percentage handling
+// Update the createProgressBar function
 function createProgressBar(percentage) {
   const container = document.createElement('div');
   container.className = 'etd-progress remove-on-percentage-update';
@@ -350,6 +350,16 @@ function createProgressBar(percentage) {
   const progressWrapper = document.createElement('div');
   progressWrapper.className = 'etd-progress-wrapper';
   
+  // Add sparkle elements for the 100% animation
+  if (percentage === 100) {
+    progressWrapper.setAttribute('data-complete', 'true');
+    for (let i = 0; i < 5; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      progressWrapper.appendChild(sparkle);
+    }
+  }
+
   const progressBar = document.createElement('div');
   progressBar.className = 'etd-progress-bar';
   
@@ -361,10 +371,16 @@ function createProgressBar(percentage) {
   progressFill.className = 'etd-progress-fill';
   progressFill.style.width = `${percentage}%`;
   progressFill.style.backgroundColor = color;
+  if (percentage === 100) {
+    progressFill.setAttribute('data-complete', 'true');
+  }
   
   const progressText = document.createElement('div');
   progressText.className = 'etd-progress-text';
   progressText.textContent = `${percentage}%`;
+  if (percentage === 100) {
+    progressText.setAttribute('data-complete', 'true');
+  }
   
   progressBar.appendChild(progressFill);
   progressBar.appendChild(progressText);
