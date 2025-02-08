@@ -169,7 +169,7 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 ### Obtenir de l'Aide
 
 - Ouvrez une issue sur GitHub
-- Contactez via [Discord](https://discord.gg/...)
+- Contactez via [Discord](smokoxren)
 - Email support : support@epitech-enhanced.dev
 
 ## 🚀 Plans Futurs
