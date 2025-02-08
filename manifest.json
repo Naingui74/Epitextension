@@ -26,6 +26,7 @@
         "styles/dark-mode.css",
         "styles/code.css",
         "styles/components.css",
+        "styles/test-interface.css",
         "styles/main.css",
         "styles.css"
       ],
