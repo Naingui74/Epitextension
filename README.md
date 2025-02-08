@@ -32,7 +32,7 @@
 1. Install the extension from your browser's store:
    - [Chrome Web Store](https://chrome.google.com/webstore/detail/epitech-enhanced/...)
    - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/epitech-enhanced/)
-
+   - [Install In ZIP] go to Tag and download 
 2. Visit [my.epitech.eu](https://my.epitech.eu)
    - Progress bars will appear automatically
    - Test diffs will be enhanced automatically
