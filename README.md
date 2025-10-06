@@ -1,6 +1,22 @@
-# 🚀 Epitech Enhanced Extension
+# 🚀 Epitech Enhanced Extension v2.2.0
 
 > Transform your Epitech experience with intelligent test analysis and project tracking
+
+## 🆕 What's New in v2.2.0
+
+### 🎯 New Features
+- **Interface Popup** : Nouvelle interface de configuration avec statistiques en temps réel
+- **Raccourcis Clavier** : Support complet des raccourcis clavier pour toutes les fonctionnalités
+- **Gestion des Paramètres** : Sauvegarde et synchronisation des préférences utilisateur
+- **Statistiques Avancées** : Suivi des tests analysés et projets suivis
+- **Mode Compact** : Vue compacte pour les différences de tests
+- **Gestion d'Erreurs Robuste** : Meilleure stabilité et gestion des erreurs
+
+### 🔧 Améliorations Techniques
+- **Manifest v3** : Mise à jour vers les dernières spécifications
+- **Service Worker** : Background script optimisé pour de meilleures performances
+- **Code Quality** : ESLint et standards de code modernes
+- **Build System** : Scripts de build automatisés pour Chrome et Firefox
 
 ## ✨ Features Showcase
 
@@ -33,7 +49,7 @@
    - [Chrome Web Store](https://chrome.google.com/webstore/detail/epitech-enhanced/...)
    - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/epitech-enhanced/)
    - [Install In ZIP] go to Tag and download 
-2. Visit [my.epitech.eu](https://my.epitech.eu)
+2. Visit [myresults.epitest.eu](https://myresults.epitest.eu)
    - Progress bars will appear automatically
    - Test diffs will be enhanced automatically
 
@@ -100,11 +116,30 @@ localStorage.setItem('etd-diff-view-mode', 'compact');
 
 ## ⌨️ Keyboard Shortcuts
 
-| Action | Shortcut |
-|--------|----------|
-| Toggle Theme | `Ctrl/Cmd + Shift + T` |
-| Copy Expected | `Ctrl/Cmd + Shift + C` |
-| Toggle View Mode | `Ctrl/Cmd + Shift + V` |
+| Action | Shortcut | Description |
+|--------|----------|-------------|
+| Toggle Theme | `Ctrl/Cmd + Shift + T` | Basculer entre le mode sombre et clair |
+| Copy Expected | `Ctrl/Cmd + Shift + C` | Copier le résultat attendu |
+| Toggle View Mode | `Ctrl/Cmd + Shift + V` | Basculer entre la vue compacte et détaillée |
+
+## 🎛️ Interface Popup
+
+L'extension dispose maintenant d'une interface popup complète accessible via l'icône de l'extension :
+
+### 📊 Statistiques
+- **Tests analysés** : Nombre de tests traités par l'extension
+- **Projets suivis** : Nombre de projets avec barres de progression
+- **Mode sombre** : Statut actuel du thème
+
+### ⚙️ Paramètres
+- **Mode sombre** : Automatique, Clair, ou Sombre
+- **Vue des différences** : Compacte ou Détaillée
+- **Notifications** : Activer/désactiver les notifications
+- **Mise à jour automatique** : Actualisation automatique des données
+
+### 🔧 Actions
+- **Réinitialiser** : Remettre les paramètres par défaut
+- **Sauvegarder** : Appliquer les nouveaux paramètres
 
 ## 🔒 Privacy & Security
 
@@ -117,7 +152,8 @@ localStorage.setItem('etd-diff-view-mode', 'compact');
   - `tabs`: For accessing test results
   - `storage`: For theme preferences
   - Host permissions:
-    - `my.epitech.eu`: Main platform
+    - `my.epitech.eu`: Legacy platform (still supported)
+    - `myresults.epitest.eu`: New platform
     - `api.epitest.eu`: Project data
 
 ## 🤝 Contributing

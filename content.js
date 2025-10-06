@@ -1,15 +1,23 @@
-// Global state
 let isUpdating = false;
 let projects = {};
 let updateTimeoutId = null;
+let settings = {};
+const stats = { testsAnalyzed: 0, projectsTracked: 0 };
 const UPDATE_INTERVAL = 1000;
 
-// Utility functions
 function isDarkMode() {
+  if (settings.darkMode === 'dark') {
+    return true;
+  }
+  if (settings.darkMode === 'light') {
+    return false;
+  }
+  
   const storedPreference = localStorage.getItem('etd-dark-mode');
   if (storedPreference !== null) {
     return storedPreference === 'true';
   }
+  
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
@@ -24,7 +32,9 @@ function toggleDarkMode() {
 }
 
 function updateThemeButtonIcon(button, isDark) {
-  if (!button) return;
+  if (!button) {
+    return;
+  }
   
   button.className = `etd-theme-toggle ${isDark ? 'dark-mode' : 'light-mode'}`;
   button.innerHTML = `
@@ -75,29 +85,73 @@ function addDarkModeToggle() {
 }
 
 function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.className = `etd-notification etd-notification-${type}`;
-  
-  const icon = document.createElement('span');
-  icon.className = 'etd-notification-icon';
-  icon.innerHTML = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
-  
-  const text = document.createElement('span');
-  text.textContent = message;
-  
-  notification.append(icon, text);
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.classList.add('etd-notification-fade-out');
-    setTimeout(() => notification.remove(), 300);
-  }, 2000);
+  try {
+    const notification = document.createElement('div');
+    notification.className = `etd-notification etd-notification-${type}`;
+    
+    const icon = document.createElement('span');
+    icon.className = 'etd-notification-icon';
+    icon.innerHTML = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+    
+    const text = document.createElement('span');
+    text.textContent = message;
+    
+    notification.append(icon, text);
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('etd-notification-fade-out');
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 300);
+    }, 2000);
+  } catch (error) {
+    console.error('Erreur lors de l\'affichage de la notification:', error);
+  }
 }
 
 function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    showNotification('Copied to clipboard!', 'success');
-  });
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification('Copié dans le presse-papiers !', 'success');
+      }).catch(error => {
+        console.error('Erreur lors de la copie:', error);
+        fallbackCopyToClipboard(text);
+      });
+    } else {
+      fallbackCopyToClipboard(text);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la copie:', error);
+    fallbackCopyToClipboard(text);
+  }
+}
+
+function fallbackCopyToClipboard(text) {
+  try {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    const successful = document.execCommand('copy');
+    document.body.removeChild(textArea);
+    
+    if (successful) {
+      showNotification('Copié dans le presse-papiers !', 'success');
+    } else {
+      showNotification('Erreur lors de la copie', 'error');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la copie de fallback:', error);
+    showNotification('Erreur lors de la copie', 'error');
+  }
 }
 
 function escapeHtml(text) {
@@ -106,26 +160,34 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Test analysis functions
 function processFailDetails(failDetails) {
-  if (!failDetails || failDetails.hasAttribute('data-processed')) return;
+  if (!failDetails || failDetails.hasAttribute('data-processed')) {
+    return;
+  }
   
   failDetails.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
     
     const failText = this.textContent;
-    if (!failText) return;
+    if (!failText) {
+      return;
+    }
 
     const gotMatch = failText.match(/# Got:\n([\s\S]*?)(?=# But expected:)/);
     const expectedMatch = failText.match(/# But expected:\n([\s\S]*?)(?=#|$)/);
     
-    if (!gotMatch || !expectedMatch) return;
+    if (!gotMatch || !expectedMatch) {
+      return;
+    }
 
     const details = {
       got: gotMatch[1].trim(),
       expected: expectedMatch[1].trim()
     };
+    
+    stats.testsAnalyzed++;
+    saveStats();
     
     const container = createModernTestError(details);
     
@@ -140,6 +202,10 @@ function processFailDetails(failDetails) {
       }
 
       testContainer.insertBefore(container, this.nextSibling);
+      
+      if (settings.diffViewMode === 'compact') {
+        container.classList.add('compact-view');
+      }
     }
   });
 
@@ -166,14 +232,14 @@ function createModernTestError(details) {
         </div>
       </div>
       <div class="test-actions">
-        <button class="test-action-btn primary" onclick="copyToClipboard('${details.expected.replace(/'/g, "\\'")}')">
+        <button class="test-action-btn primary" onclick="copyToClipboard('${details.expected.replace(/'/g, '\\\'')}')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
             <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
           </svg>
           Copy Expected
         </button>
-        <button class="test-action-btn" onclick="downloadTestOutput('${details.expected.replace(/'/g, "\\'")}')">
+        <button class="test-action-btn" onclick="downloadTestOutput('${details.expected.replace(/'/g, '\\\'')}')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
@@ -330,19 +396,7 @@ function analyzeDifferences(got, expected) {
   return differences;
 }
 
-function downloadTestOutput(content) {
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `test-output-${new Date().toISOString()}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
 
-// Update the createProgressBar function
 function createProgressBar(percentage) {
   const container = document.createElement('div');
   container.className = 'etd-progress remove-on-percentage-update';
@@ -350,22 +404,65 @@ function createProgressBar(percentage) {
   const progressWrapper = document.createElement('div');
   progressWrapper.className = 'etd-progress-wrapper';
   
-  // Add sparkle elements for the 100% animation
   if (percentage === 100) {
     progressWrapper.setAttribute('data-complete', 'true');
-    for (let i = 0; i < 5; i++) {
+    
+    for (let i = 0; i < 8; i++) {
       const sparkle = document.createElement('div');
       sparkle.className = 'sparkle';
       progressWrapper.appendChild(sparkle);
     }
+    
+    for (let i = 0; i < 12; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'celebration-particle';
+      particle.style.cssText = `
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+        border-radius: 50%;
+        animation: particle-burst 3s ease-out forwards;
+        animation-delay: ${i * 0.1}s;
+        left: ${50 + (Math.random() - 0.5) * 100}%;
+        top: ${50 + (Math.random() - 0.5) * 100}%;
+        z-index: 6;
+      `;
+      progressWrapper.appendChild(particle);
+    }
+    
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+      
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (error) {
+      // Audio not supported
+    }
+    
+    setTimeout(() => {
+      showNotification('🎉 Félicitations ! Projet terminé à 100% ! 🎉', 'success');
+    }, 500);
   }
 
   const progressBar = document.createElement('div');
   progressBar.className = 'etd-progress-bar';
   
-  const color = percentage >= 75 ? "#22c55e" : 
-                percentage >= 25 ? "#f97316" : 
-                "#ef4444";
+  const color = percentage >= 75 ? '#22c55e' : 
+    percentage >= 25 ? '#f97316' : 
+      '#ef4444';
   
   const progressFill = document.createElement('div');
   progressFill.className = 'etd-progress-fill';
@@ -395,14 +492,16 @@ function createProgressBar(percentage) {
 }
 
 function calculateProjectPercentage(project) {
-  if (!project?.results?.skills) return 0;
+  if (!project?.results?.skills) {
+    return 0;
+  }
   
-  const skills = project.results.skills;
+  const {skills} = project.results;
   let total = 0;
   let passed = 0;
 
   for (const task in skills) {
-    if (skills.hasOwnProperty(task)) {
+    if (Object.prototype.hasOwnProperty.call(skills, task)) {
       total += skills[task].count || 0;
       passed += skills[task].passed || 0;
     }
@@ -412,17 +511,26 @@ function calculateProjectPercentage(project) {
 }
 
 async function fetchProjects() {
-  const hash = window.location.hash;
-  if (!hash) return;
-
-  const match = hash.match(/#[ym]\/(\d{4})/);
-  if (!match) return;
-
-  const year = match[1];
-  const token = localStorage.getItem("argos-api.oidc-token")?.replace(/^"|"$/g, "");
-  if (!token) return;
-
   try {
+    const {hash} = window.location;
+    if (!hash) {
+      console.log('Aucun hash trouvé dans l\'URL');
+      return;
+    }
+
+    const match = hash.match(/#[ym]\/(\d{4})/);
+    if (!match) {
+      console.log('Format de hash non reconnu:', hash);
+      return;
+    }
+
+    const year = match[1];
+    const token = localStorage.getItem('argos-api.oidc-token')?.replace(/^"|"$/g, '');
+    if (!token) {
+      console.log('Token d\'authentification non trouvé');
+      return;
+    }
+
     const response = await fetch(`https://api.epitest.eu/me/${year}`, {
       headers: { 
         'Authorization': `Bearer ${token}`,
@@ -430,7 +538,10 @@ async function fetchProjects() {
       }
     });
 
-    if (!response.ok) return;
+    if (!response.ok) {
+      console.error('Erreur API:', response.status, response.statusText);
+      return;
+    }
 
     const data = await response.json();
     if (Array.isArray(data)) {
@@ -440,14 +551,20 @@ async function fetchProjects() {
           projects[element.project.name] = element;
         }
       }
+      console.log(`${Object.keys(projects).length} projets chargés`);
+    } else {
+      console.warn('Format de données inattendu:', data);
     }
   } catch (error) {
-    console.error('Error fetching projects:', error);
+    console.error('Erreur lors de la récupération des projets:', error);
+    showNotification('Erreur lors du chargement des projets', 'error');
   }
 }
 
 async function updateProjectPercentages() {
-  if (isUpdating) return;
+  if (isUpdating) {
+    return;
+  }
   isUpdating = true;
 
   try {
@@ -461,28 +578,49 @@ async function updateProjectPercentages() {
       await fetchProjects();
     }
 
-    const projectCards = document.querySelectorAll(".mdl-card");
-    if (!projectCards.length) return;
+    const projectCards = document.querySelectorAll('.mdl-card');
+    if (!projectCards.length) {
+      return;
+    }
+    
+    let projectsTracked = 0;
     
     for (const card of projectCards) {
-      if (!card?.isConnected) continue;
+      if (!card?.isConnected) {
+        continue;
+      }
 
-      const titleSpan = card.querySelector(".mdl-card__title-text span");
-      if (!titleSpan) continue;
+      const titleSpan = card.querySelector('.mdl-card__title-text span');
+      if (!titleSpan) {
+        continue;
+      }
 
       const projectName = titleSpan.textContent.trim();
       const project = projects[projectName];
-      if (!project) continue;
+      if (!project) {
+        continue;
+      }
 
       const percentage = calculateProjectPercentage(project);
       const progressBar = createProgressBar(percentage);
       
-      if (!progressBar || !card.isConnected) continue;
+      if (!progressBar || !card.isConnected) {
+        continue;
+      }
 
-      const titleSection = card.querySelector(".mdl-card__title");
-      if (!titleSection?.parentNode?.isConnected) continue;
+      const titleSection = card.querySelector('.mdl-card__title');
+      if (!titleSection?.parentNode?.isConnected) {
+        continue;
+      }
 
       titleSection.parentNode.insertBefore(progressBar, titleSection.nextSibling);
+      projectsTracked++;
+    }
+    
+    // Mettre à jour les statistiques
+    if (projectsTracked > 0) {
+      stats.projectsTracked = projectsTracked;
+      saveStats();
     }
   } catch (error) {
     console.error('Error updating project percentages:', error);
@@ -549,9 +687,11 @@ function init() {
     subtree: true 
   });
 
-  // Project percentage observer
-  const projectObserver = new MutationObserver((mutations) => {
-    if (!window.location.href.includes('my.epitech.eu')) return;
+  const projectObserver = new MutationObserver((_mutations) => {
+    if (!window.location.href.includes('my.epitech.eu') && 
+        !window.location.href.includes('myresults.epitest.eu')) {
+      return;
+    }
     
     if (currentPath !== window.location.href) {
       currentPath = window.location.href;
@@ -569,23 +709,162 @@ function init() {
     attributeFilter: ['class']
   });
 
-  // Handle URL changes
   window.addEventListener('hashchange', () => {
-    if (window.location.href.includes('my.epitech.eu')) {
+    if (window.location.href.includes('my.epitech.eu') || 
+        window.location.href.includes('myresults.epitest.eu')) {
       projects = {};
       updateProjectPercentagesWithDelay();
     }
   });
 
-  // Initial update
-  if (window.location.href.includes('my.epitech.eu')) {
+  if (window.location.href.includes('my.epitech.eu') || 
+      window.location.href.includes('myresults.epitest.eu')) {
     updateProjectPercentagesWithDelay();
   }
 }
 
-// Start initialization
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
+const browserAPI = (() => {
+  if (typeof chrome !== 'undefined' && chrome.runtime) {
+    return chrome;
+  } else if (typeof browser !== 'undefined' && browser.runtime) {
+    return browser;
+  } else {
+    throw new Error('Extension API not available');
+  }
+})();
+
+browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  switch (request.action) {
+  case 'toggleTheme':
+    toggleDarkMode();
+    sendResponse({ success: true });
+    break;
+    
+  case 'copyExpected': {
+    const expectedElement = document.querySelector('.test-dashboard .test-output-content');
+    if (expectedElement) {
+      const text = expectedElement.textContent;
+      copyToClipboard(text);
+      sendResponse({ success: true });
+    } else {
+      sendResponse({ success: false, error: 'No expected output found' });
+    }
+    break;
+  }
+    
+  case 'toggleDiffView': {
+    const diffView = document.querySelector('.test-dashboard');
+    if (diffView) {
+      diffView.classList.toggle('compact-view');
+      sendResponse({ success: true });
+    } else {
+      sendResponse({ success: false, error: 'No diff view found' });
+    }
+    break;
+  }
+    
+  case 'settingsChanged': {
+    const {settings: newSettings} = request;
+    settings = newSettings;
+    applySettings();
+    sendResponse({ success: true });
+    break;
+  }
+    
+  case 'getStats':
+    sendResponse({ stats });
+    break;
+  }
+  
+  return true;
+});
+
+function applySettings() {
+  if (settings.darkMode === 'dark') {
+    document.body.classList.add('etd-dark-mode');
+  } else if (settings.darkMode === 'light') {
+    document.body.classList.remove('etd-dark-mode');
+  } else {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.toggle('etd-dark-mode', isDark);
+  }
+  
+  const diffViews = document.querySelectorAll('.test-dashboard');
+  diffViews.forEach(view => {
+    if (settings.diffViewMode === 'compact') {
+      view.classList.add('compact-view');
+    } else {
+      view.classList.remove('compact-view');
+    }
+  });
+}
+
+async function loadSettings() {
+  try {
+    const result = await browserAPI.storage.local.get(['etd-settings']);
+    settings = result['etd-settings'] || {
+      darkMode: 'auto',
+      notifications: true,
+      autoUpdate: true,
+      diffViewMode: 'compact'
+    };
+  } catch (error) {
+    console.error('Erreur lors du chargement des paramètres:', error);
+    settings = {
+      darkMode: 'auto',
+      notifications: true,
+      autoUpdate: true,
+      diffViewMode: 'compact'
+    };
+  }
+}
+
+async function saveStats() {
+  try {
+    await browserAPI.storage.local.set({ 'etd-stats': stats });
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde des statistiques:', error);
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    switch (e.key) {
+    case 't':
+      if (e.shiftKey) {
+        e.preventDefault();
+        toggleDarkMode();
+      }
+      break;
+    case 'c':
+      if (e.shiftKey) {
+        e.preventDefault();
+        const expectedElement = document.querySelector('.test-dashboard .test-output-content');
+        if (expectedElement) {
+          copyToClipboard(expectedElement.textContent);
+        }
+      }
+      break;
+    case 'v':
+      if (e.shiftKey) {
+        e.preventDefault();
+        const diffView = document.querySelector('.test-dashboard');
+        if (diffView) {
+          diffView.classList.toggle('compact-view');
+        }
+      }
+      break;
+    }
+  }
+});
+
+async function startInit() {
+  await loadSettings();
   init();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startInit);
+} else {
+  startInit();
 }

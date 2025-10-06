@@ -3,47 +3,18 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-yarn.lock
 
 # Build outputs
 dist/
 build/
 *.zip
-*.crx
-*.pem
-*.xpi
 
-# Development environment
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# IDE and editor files
-.idea/
+# IDE files
 .vscode/
+.idea/
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
-
-# Testing
-coverage/
-.nyc_output/
-*.lcov
-
-# Temporary files
-*.log
-*.tmp
-.temp/
-.cache/
-
-# Extension specific
-web-ext-artifacts/
-.web-extension-id
 
 # OS generated files
 .DS_Store
@@ -54,20 +25,81 @@ web-ext-artifacts/
 ehthumbs.db
 Thumbs.db
 
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
 
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
 # Optional REPL history
 .node_repl_history
 
-# Diagnostic reports
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# Output of 'npm pack'
+*.tgz
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+.env.production
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

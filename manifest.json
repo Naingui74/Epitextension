@@ -1,25 +1,35 @@
 {
   "manifest_version": 3,
   "name": "Epitech Enhanced Extension",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Advanced test diff viewer and project percentage tracker for Epitech students",
   "author": "Aaron Aka Naingui",
+  "homepage_url": "https://github.com/naingui/epitech-enhanced-extension",
   "browser_specific_settings": {
     "gecko": {
       "id": "epitech-enhanced@naingui.dev",
-      "strict_min_version": "57.0"
+      "strict_min_version": "57.0",
+      "update_url": "https://github.com/naingui/epitech-enhanced-extension/releases/latest/download/updates.json"
     }
   },
   "permissions": [
     "tabs",
     "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
     "https://my.epitech.eu/*",
+    "https://myresults.epitest.eu/*",
     "https://api.epitest.eu/*",
     "https://api.github.com/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://my.epitech.eu/*"],
+      "matches": [
+        "https://my.epitech.eu/*",
+        "https://myresults.epitest.eu/*"
+      ],
       "css": [
         "styles/variables.css",
         "styles/progress.css",
@@ -30,13 +40,57 @@
         "styles/main.css",
         "styles.css"
       ],
-      "js": ["content.js"],
+      "js": ["utils.js", "content.js"],
       "run_at": "document_end"
     }
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Epitech Enhanced",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["styles/*", "img/*"],
+      "matches": [
+        "https://my.epitech.eu/*",
+        "https://myresults.epitest.eu/*"
+      ]
+    }
+  ],
+  "commands": {
+    "toggle-theme": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+T",
+        "mac": "Command+Shift+T"
+      },
+      "description": "Basculer entre le mode sombre et clair"
+    },
+    "copy-expected": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C",
+        "mac": "Command+Shift+C"
+      },
+      "description": "Copier le résultat attendu"
+    },
+    "toggle-diff-view": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+V",
+        "mac": "Command+Shift+V"
+      },
+      "description": "Basculer entre la vue compacte et détaillée"
+    }
   }
 }

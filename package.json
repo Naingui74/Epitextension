@@ -1,0 +1,77 @@
+{
+  "name": "epitech-enhanced-extension",
+  "version": "2.2.0",
+  "description": "Advanced test diff viewer and project percentage tracker for Epitech students",
+  "author": "Aaron Aka Naingui <aaron@naingui.dev>",
+  "homepage": "https://github.com/naingui/epitech-enhanced-extension",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naingui/epitech-enhanced-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/naingui/epitech-enhanced-extension/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "epitech",
+    "extension",
+    "browser",
+    "education",
+    "testing",
+    "diff",
+    "progress",
+    "tracking"
+  ],
+  "scripts": {
+    "build": "npm run build:all",
+    "build:all": "./build.sh all",
+    "build:chrome": "./build.sh chrome",
+    "build:firefox": "./build.sh firefox",
+    "build:edge": "./build.sh edge",
+    "dev": "npm run watch",
+    "watch": "nodemon --watch content.js --watch styles/ --watch utils.js --exec 'npm run build:all'",
+    "lint": "eslint content.js background.js popup.js utils.js",
+    "lint:fix": "eslint content.js background.js popup.js utils.js --fix",
+    "test": "echo 'No tests specified' && exit 0",
+    "clean": "./build.sh clean",
+    "prebuild": "npm run clean",
+    "version": "npm run build:all && git add dist/",
+    "postversion": "git push && git push --tags",
+    "install:chrome": "npm run build:chrome && echo 'Chrome extension built in dist/chrome-extension.zip'",
+    "install:firefox": "npm run build:firefox && echo 'Firefox extension built in dist/firefox-extension.zip'",
+    "install:edge": "npm run build:edge && echo 'Edge extension built in dist/edge-extension.zip'"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not dead"
+  ],
+  "manifest": {
+    "chrome": "manifest.chrome.json",
+    "firefox": "manifest.firefox.json"
+  },
+  "files": [
+    "content.js",
+    "background.js",
+    "popup.html",
+    "popup.js",
+    "utils.js",
+    "styles/",
+    "img/",
+    "icon*.png",
+    "manifest.json",
+    "manifest.chrome.json",
+    "manifest.firefox.json"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}

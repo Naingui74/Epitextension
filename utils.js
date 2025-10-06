@@ -30,7 +30,7 @@ export function saveToHistory(diffData) {
     const history = result.diffHistory || [];
     history.unshift({
       timestamp: Date.now(),
-      diff: diffData,
+      diff: diffData
     });
     
     // Keep only last 5 entries

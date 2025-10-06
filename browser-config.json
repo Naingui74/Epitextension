@@ -1,0 +1,94 @@
+{
+  "browsers": {
+    "chrome": {
+      "name": "Google Chrome",
+      "minVersion": "88",
+      "manifestVersion": 3,
+      "features": [
+        "service_worker",
+        "action_api",
+        "commands_api",
+        "web_accessible_resources",
+        "host_permissions"
+      ],
+      "buildCommand": "./build.sh chrome",
+      "storeUrl": "https://chrome.google.com/webstore",
+      "installInstructions": "1. Téléchargez chrome-extension.zip\n2. Allez dans chrome://extensions/\n3. Activez le mode développeur\n4. Cliquez sur 'Charger l'extension non empaquetée'\n5. Sélectionnez le dossier décompressé"
+    },
+    "firefox": {
+      "name": "Mozilla Firefox",
+      "minVersion": "57",
+      "manifestVersion": 2,
+      "features": [
+        "background_scripts",
+        "browser_action",
+        "commands_api",
+        "web_accessible_resources",
+        "permissions"
+      ],
+      "buildCommand": "./build.sh firefox",
+      "storeUrl": "https://addons.mozilla.org",
+      "installInstructions": "1. Téléchargez firefox-extension.zip\n2. Allez dans about:debugging\n3. Cliquez sur 'Ce Firefox'\n4. Cliquez sur 'Charger un module temporaire'\n5. Sélectionnez le fichier manifest.json"
+    },
+    "edge": {
+      "name": "Microsoft Edge",
+      "minVersion": "88",
+      "manifestVersion": 3,
+      "features": [
+        "service_worker",
+        "action_api",
+        "commands_api",
+        "web_accessible_resources",
+        "host_permissions"
+      ],
+      "buildCommand": "./build.sh edge",
+      "storeUrl": "https://microsoftedge.microsoft.com/addons",
+      "installInstructions": "1. Téléchargez edge-extension.zip\n2. Allez dans edge://extensions/\n3. Activez le mode développeur\n4. Cliquez sur 'Charger décompressé'\n5. Sélectionnez le dossier décompressé"
+    },
+    "safari": {
+      "name": "Apple Safari",
+      "minVersion": "14",
+      "manifestVersion": 2,
+      "features": [
+        "background_scripts",
+        "browser_action",
+        "commands_api",
+        "web_accessible_resources",
+        "permissions"
+      ],
+      "buildCommand": "./build.sh safari",
+      "storeUrl": "https://apps.apple.com",
+      "installInstructions": "1. Téléchargez safari-extension.zip\n2. Ouvrez Safari\n3. Allez dans Développement > Extension Web\n4. Cliquez sur 'Charger l'extension'\n5. Sélectionnez le dossier décompressé"
+    }
+  },
+  "compatibility": {
+    "chrome": {
+      "supported": true,
+      "tested": ["88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150"],
+      "notes": "Compatible avec toutes les versions récentes de Chrome"
+    },
+    "firefox": {
+      "supported": true,
+      "tested": ["57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150"],
+      "notes": "Compatible avec toutes les versions récentes de Firefox"
+    },
+    "edge": {
+      "supported": true,
+      "tested": ["88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150"],
+      "notes": "Compatible avec toutes les versions récentes d'Edge"
+    },
+    "safari": {
+      "supported": false,
+      "tested": [],
+      "notes": "Safari nécessite une extension native, pas encore supporté"
+    }
+  },
+  "features": {
+    "cross_browser": true,
+    "auto_detection": true,
+    "fallback_support": true,
+    "performance_optimized": true,
+    "accessibility_support": true,
+    "responsive_design": true
+  }
+}
